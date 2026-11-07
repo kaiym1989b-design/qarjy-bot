@@ -59,7 +59,8 @@ python main.py                     # бот қосылды → Telegram-да /st
 
 1. Жобаны GitHub-қа жүкте (`.env` `.gitignore`-да тұр — жария болмайды).
 2. Railway → **New Project → Deploy from GitHub repo** → осы репоны таңда.
-3. **Variables** бөліміне `BOT_TOKEN` және `DATABASE_URL` қос.
+3. **Variables** бөліміне екеуін қос: `BOT_TOKEN` және `DB_PASSWORD` (Supabase дерекқор құпиясөзі).
+   Толық жолды құрастыру керек емес — бот оны өзі жасайды. Қаласаң, оның орнына толық `DATABASE_URL` беруге де болады.
 4. Railway `Procfile`-дағы `worker: python main.py` процесін өзі қосады.
 5. **Deploy Logs**-та `Бот іске қосылды ✅` жазуын күт → Telegram-да `/start`.
 
