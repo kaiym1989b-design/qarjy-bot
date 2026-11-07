@@ -27,9 +27,18 @@ def get_pool() -> asyncpg.Pool:
 
 
 async def apply_schema() -> None:
-    """Кестелер жоқ болса құрады (бар болса ештеңе өзгертпейді)."""
-    await get_pool().execute(SCHEMA_FILE.read_text(encoding="utf-8"))
-    log.info("Схема тексерілді")
+    """Кестелер жоқ болса құрады (бар болса ештеңе өзгертпейді).
+
+    Бот шектеулі қолданушымен қосылса, кесте құруға құқығы болмайды —
+    бұл қалыпты: кестелер Supabase-те алдын ала құрылған, жай жалғастырамыз.
+    """
+    try:
+        await get_pool().execute(SCHEMA_FILE.read_text(encoding="utf-8"))
+        log.info("Схема тексерілді")
+    except asyncpg.InsufficientPrivilegeError:
+        log.info("Схеманы өзгертуге құқық жоқ — кестелер бұрыннан бар деп есептейміз")
+    # Кестелер шынымен қолжетімді ме — тексереміз (жоқ болса, бот бірден анық қате береді)
+    await get_pool().fetchval("select count(*) from users")
 
 
 async def close_pool() -> None:
